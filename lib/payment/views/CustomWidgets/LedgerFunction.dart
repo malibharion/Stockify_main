@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:open_file/open_file.dart';
@@ -35,138 +36,211 @@ class LedgerFunction {
         build: (pw.Context context) {
           return pw.Column(
             children: [
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'PreFex INC',
-                  style: pw.TextStyle(
-                      font: ttf,
-                      fontSize: 22.sp,
-                      fontWeight: pw.FontWeight.bold),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  '172 lvy Club Gottllieburt',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Switzerland',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'CH - 12345',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
-                pw.Text(
-                  'To',
-                  style: pw.TextStyle(
-                      font: ttf,
-                      fontSize: 22.sp,
-                      fontWeight: pw.FontWeight.bold),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
-                pw.Text(
-                  'Weimann Daniel and Kuzarev Artem',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
-                pw.Text(
-                  '1937 Emiie Center ',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
-                pw.Text(
-                  'lake Augustine Kantus, WI 54485',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Account Summary',
-                  style: pw.TextStyle(
-                      font: ttf,
-                      fontSize: 22.sp,
-                      fontWeight: pw.FontWeight.bold),
-                ),
-              ]),
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text('Firm Log'),
+                    pw.Text('Aman Traders'),
+                    pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Row(children: [
+                            pw.Text('Phone Number',
+                                style: pw.TextStyle(fontSize: 4)),
+                            pw.Text('1234567890',
+                                style: pw.TextStyle(fontSize: 4)),
+                          ]),
+                          pw.Row(children: [
+                            pw.Text('Email', style: pw.TextStyle(fontSize: 4)),
+                            pw.Text('malikmuhammad103@gmail.com',
+                                style: pw.TextStyle(fontSize: 4)),
+                          ]),
+                          pw.Row(children: [
+                            pw.Text('Address',
+                                style: pw.TextStyle(fontSize: 4)),
+                            pw.Text('Okrasoft Bullo Khel Road Mianwali',
+                                style: pw.TextStyle(fontSize: 4)),
+                          ])
+                        ])
+                  ]),
 
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Date: ${DateTime.now().toLocal().toString().split(' ')[0]}',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
+              pw.Container(
+                height: 30,
+                alignment: pw.Alignment.center,
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Container(
+                      width: 150,
+                      child: pw.Divider(),
+                    ),
+                    pw.SizedBox(width: 10),
+                    pw.Text('Customer wise sale Summary'),
+                    pw.SizedBox(width: 10),
+                    pw.Container(
+                      width: 150,
+                      child: pw.Divider(),
+                    ),
+                  ],
                 ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text('---------------------------------------',
-                    style: pw.TextStyle(font: ttf, fontSize: 12.sp)),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Beging Balance:           0.00 Rs ',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Innovice Amout:           23344 Rs ',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Amout Paid:           83342948 Rs ',
-                  style: pw.TextStyle(font: ttf, fontSize: 12.sp),
-                ),
-              ]),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text(
-                  'Balance Due:           3423.00 Rs ',
-                  style: pw.TextStyle(
-                    font: ttf,
-                    fontSize: 12.sp,
-                  ),
-                ),
-              ]),
+              ),
 
               pw.SizedBox(height: 20),
 
               // Table
               pw.Table(
                 border: pw.TableBorder.all(),
+                tableWidth: pw.TableWidth.max,
+                columnWidths: {
+                  0: pw.FixedColumnWidth(40.0),
+                  1: pw.FixedColumnWidth(40.0),
+                  2: pw.FixedColumnWidth(40.0),
+                  3: pw.FixedColumnWidth(40.0),
+                  4: pw.FixedColumnWidth(40.0),
+                  5: pw.FixedColumnWidth(40.0),
+                  6: pw.FixedColumnWidth(40.0),
+                  7: pw.FixedColumnWidth(40.0),
+                  8: pw.FixedColumnWidth(40.0),
+                  9: pw.FixedColumnWidth(40.0),
+                  14: pw.FixedColumnWidth(40.0),
+                },
                 children: [
                   pw.TableRow(
                     decoration:
-                        pw.BoxDecoration(color: PdfColor.fromHex("#E2E3E5")),
+                        pw.BoxDecoration(color: PdfColor.fromHex("#808080")),
                     children: [
-                      pw.Text("Sr No",
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Store Name",
                           style: pw.TextStyle(
-                              font: ttf,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 17.sp)),
-                      pw.Text("Date",
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Company Name",
                           style: pw.TextStyle(
-                              font: ttf,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 17.sp)),
-                      pw.Text("Customer",
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Product Name",
                           style: pw.TextStyle(
-                              font: ttf,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 17.sp)),
-                      pw.Text("Amount",
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Purchase Quantity",
                           style: pw.TextStyle(
-                              font: ttf,
-                              fontWeight: pw.FontWeight.bold,
-                              fontSize: 17.sp)),
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Purchase Value",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Purchase Return Quantity",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Purchase Return Value",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Total Sale Quantity",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Total Sale Value",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Sale Return Quantity",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 14,
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          "Sale Return Value",
+                          style: pw.TextStyle(
+                            font: ttf,
+                            fontSize: 4.sp,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   ...data.asMap().entries.map((entry) {
@@ -180,14 +254,94 @@ class LedgerFunction {
                             : PdfColors.white,
                       ),
                       children: [
-                        pw.Text(row["Sr No"]!,
-                            style: pw.TextStyle(font: ttf, fontSize: 10)),
-                        pw.Text(row["Date"]!,
-                            style: pw.TextStyle(font: ttf, fontSize: 10)),
-                        pw.Text(row["Customer"]!,
-                            style: pw.TextStyle(font: ttf, fontSize: 10)),
-                        pw.Text(row["Amount"]!,
-                            style: pw.TextStyle(font: ttf, fontSize: 10)),
+                        pw.Container(
+                          height: 14, // Set the desired height
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["store_name"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["sCompanyName"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["sProductName"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["pur_total_qty"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["pur_value"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["purchase_return_qty"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["pur_return_value"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["sale_total_qty"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["sale_value"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["sale_return_total_qty"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
+                        pw.Container(
+                          height: 14,
+                          alignment: pw.Alignment.center,
+                          child: pw.Text(
+                            row["sale_return_value"] ?? 'N/A',
+                            style: pw.TextStyle(font: ttf, fontSize: 4.sp),
+                          ),
+                        ),
                       ],
                     );
                   }).toList(),
