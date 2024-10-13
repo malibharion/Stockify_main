@@ -160,3 +160,5 @@ class FetchCustomerExpenses extends PopEvent {
     this.customerId,
   );
 }
+
+class CashColor extends PopEvent {}

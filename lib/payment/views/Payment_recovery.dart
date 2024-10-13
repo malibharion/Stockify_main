@@ -85,7 +85,7 @@ class _PaymentRecoveryState extends State<PaymentRecovery> {
   final noteController = TextEditingController();
   final textEditingController = TextEditingController();
   final String location = 'enable Location';
-  bool IsPressed = true;
+  bool IsPressed = false;
 
   Future<void> _handleSaveLocation() async {
     bool serviceEnabled;
@@ -730,13 +730,42 @@ class _PaymentRecoveryState extends State<PaymentRecovery> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            IsPressed = false;
+                        BlocBuilder<Popbloc, Popstate>(
+                          builder: (context, state) {
+                            return TextButton(
+                              onPressed: () {
+                                context.read<Popbloc>().add(CashColor());
+                              },
+
+
+////////////////////////yhhh cgeck haai 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              child: Text(
+                                'Cash',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    state.cashColor ? Colors.blue : Colors.grey,
+                              ),
+                            );
                           },
-                          child: Text('Cash'),
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.blueAccent),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .030,
@@ -769,10 +798,13 @@ class _PaymentRecoveryState extends State<PaymentRecovery> {
                                           fontFamily: 'Roboto')),
                                   value: state.selectedBank ?? "Select Bank",
                                   onChanged: (String? newValue) async {
+                                    context.read<Popbloc>().add(CashColor());
+
                                     if (newValue != null &&
                                         newValue.isNotEmpty) {
                                       int? bankId =
                                           state.getBankIdByName(newValue);
+
                                       if (bankId != null) {
                                         (state.copyWith(
                                             selectedBanks: newValue));
@@ -906,13 +938,19 @@ class _PaymentRecoveryState extends State<PaymentRecovery> {
                         builder: (context, state) {
                           return GestureDetector(
                             onTap: () async {
+                              print(
+                                  'Selected customer: ${state.selectedCustomer}');
+                              print(
+                                  'Selected customer ID: ${state.selectedCustomerId}');
                               final appID = await db.getAppId();
+
                               // if (IsPressed == true) {
                               // final payment = PermanentCustomerPayment(iBankID: 1);
                               // } else {
                               //   PermanentCustomerPayment(
                               //       iBankID: state.selectedBankId);
                               // }
+
                               if (state.selectedCustomer != null &&
                                   state.selectedCustomerId != 0) {
                                 final payment = PermanentCustomerPayment(
@@ -928,6 +966,7 @@ class _PaymentRecoveryState extends State<PaymentRecovery> {
                                 );
 
                                 print('Payment object created: $payment');
+
                                 context.read<Popbloc>().add(
                                       InsertPayment(
                                         payment,
@@ -940,7 +979,19 @@ class _PaymentRecoveryState extends State<PaymentRecovery> {
                                     final response =
                                         await sendPaymentToApi(payment);
                                     if (response.statusCode == 200) {
+                                      final responseData =
+                                          jsonDecode(response.body);
+                                      final transactionId =
+                                          responseData['transaction_id'];
+                                      print(
+                                          "Transaction Id recieved : $transactionId");
+
+                                      payment.transaction_id = transactionId;
+                                      await db.updatePaymentWithTransactionId(
+                                          payment);
+
                                       print('Payment sent to API successfully');
+
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(

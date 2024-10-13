@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:okra_distributer/payment/Db/dbhelper.dart';
 
 class infoCont extends StatefulWidget {
   final String? name;
   final DateTime? date;
   final int? price;
   final String? refNo;
+
   const infoCont({super.key, this.name, this.price, this.refNo, this.date});
 
   @override
@@ -99,7 +101,7 @@ class _infoContState extends State<infoCont> {
                         : 0,
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * .40,
+                    width: MediaQuery.of(context).size.width * .35,
                   ),
                   Row(
                     children: [

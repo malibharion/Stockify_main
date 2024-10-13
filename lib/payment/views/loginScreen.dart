@@ -5,10 +5,12 @@ import 'package:okra_distributer/payment/Db/dbhelper.dart';
 import 'package:okra_distributer/payment/views/Constant.dart';
 import 'package:okra_distributer/payment/views/GettingDataScreen.dart';
 import 'package:okra_distributer/payment/views/sendingDeviceInfo.dart';
+import 'package:okra_distributer/view/first_homescreen/first_home_screen.dart';
 
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -18,6 +20,8 @@ class Loginscreen extends StatefulWidget {
 }
 
 class _LoginscreenState extends State<Loginscreen> {
+  late Database database;
+  // final Database database;
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -43,11 +47,13 @@ class _LoginscreenState extends State<Loginscreen> {
         final jsonData = jsonDecode(response.body);
         final token = jsonData['token'];
         final userId = jsonData['user_id'];
+        final firmId = jsonData['iFirmID'];
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('authToken', token);
         await prefs.setString('user_id', userId);
-
+        await prefs.setString('firm_id', firmId);
+        database = await DBHelper().initDb();
         if (token != null) {
           await Future.delayed(Duration(seconds: 1));
           final sendingDeviceInfo = SendingDeviceInfo();
@@ -56,7 +62,10 @@ class _LoginscreenState extends State<Loginscreen> {
           print('Token: $token');
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => GetDataScreen()),
+            MaterialPageRoute(
+                builder: (context) => FirstHomeScreen(
+                      database: database,
+                    )),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

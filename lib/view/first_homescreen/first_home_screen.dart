@@ -4,15 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
+import 'package:okra_distributer/FirmPartner/Add_Investment/add_investment.dart';
+import 'package:okra_distributer/FirmPartner/Add_partner/Add_Partner_1.dart';
+import 'package:okra_distributer/FirmPartner/Withdraw/withdraw.dart';
+import 'package:okra_distributer/Reports/Store%20Sale%20Purchase%20Report/StoreSalePurchaseList.dart';
 import 'package:okra_distributer/components/quick_link_card.dart';
 import 'package:okra_distributer/components/sale_card.dart';
 import 'package:okra_distributer/components/text_component.dart';
 import 'package:okra_distributer/consts/const.dart';
+import 'package:okra_distributer/payment/views/CustomerReciptList.dart';
 import 'package:okra_distributer/payment/views/Payment_recovery.dart';
 import 'package:okra_distributer/payment/views/apicheckingScreen.dart';
 import 'package:okra_distributer/payment/views/customer.dart';
 import 'package:okra_distributer/payment/views/loginScreen.dart';
-import 'package:okra_distributer/view/auth/login_screen.dart';
+import 'package:okra_distributer/payment/views/paymnetLedger.dart';
+
 import 'package:okra_distributer/view/daily_expense/UI/daily_expense.dart';
 import 'package:okra_distributer/view/daily_expense/daily_expense_list/UI/daily_expense_list.dart';
 import 'package:okra_distributer/view/dashboard/dashboard_screen.dart';
@@ -457,10 +463,10 @@ class _FirstHomeScreenState extends State<FirstHomeScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const LoginScreen()));
                   },
                   child: const Text("Login")),
 
@@ -871,7 +877,7 @@ class _FirstHomeScreenState extends State<FirstHomeScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CustomerScreen()));
+                                builder: (context) => Customerreciptlist()));
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -879,7 +885,7 @@ class _FirstHomeScreenState extends State<FirstHomeScreen> {
                           Padding(
                             padding: EdgeInsets.only(left: 20),
                             child: AppText(
-                                title: "Customer screen",
+                                title: "Customer recipt list",
                                 color: Colors
                                     .black87, // Change the color to match your theme
                                 font_size: 13,
@@ -899,10 +905,10 @@ class _FirstHomeScreenState extends State<FirstHomeScreen> {
                     //-----------------------
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Loginscreen()));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => CustomerrLedger()));
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -910,7 +916,7 @@ class _FirstHomeScreenState extends State<FirstHomeScreen> {
                           Padding(
                             padding: EdgeInsets.only(left: 20),
                             child: AppText(
-                                title: "login screen",
+                                title: "Customer Ledger",
                                 color: Colors
                                     .black87, // Change the color to match your theme
                                 font_size: 13,
@@ -1057,6 +1063,175 @@ class _FirstHomeScreenState extends State<FirstHomeScreen> {
                           )
                         ],
                       ),
+                    ),
+                  ],
+                )),
+
+            //------------------firm adding
+            GFAccordion(
+                titleBorderRadius: BorderRadius.circular(10),
+                expandedTitleBackgroundColor: Colors.transparent,
+                collapsedTitleBackgroundColor: Colors.transparent,
+                titleChild: Row(
+                  children: [
+                    Image(
+                        width: 20,
+                        image: AssetImage("assets/images/Partner.png")),
+                    SizedBox(
+                        width:
+                            15), // Add some spacing between the icon and the text
+                    AppText(
+                      title: 'Firm Patner',
+                      color: Colors
+                          .black87, // Change the color to match your theme
+                      font_size: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+                contentChild: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddPartner1()));
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: AppText(
+                                title: "Add Partner",
+                                color: Colors
+                                    .black87, // Change the color to match your theme
+                                font_size: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Icon(
+                            Icons.add,
+                            color: Colors.black45,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: appsubtitletextColor,
+                      thickness: 0.2,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddInvestment()));
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: AppText(
+                                title: "Add Investment",
+                                color: Colors
+                                    .black87, // Change the color to match your theme
+                                font_size: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Icon(
+                            Icons.add,
+                            color: Colors.black45,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: appsubtitletextColor,
+                      thickness: 0.2,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Withdraw()));
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: AppText(
+                                title: "Withdraw",
+                                color: Colors
+                                    .black87, // Change the color to match your theme
+                                font_size: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Icon(
+                            Icons.add,
+                            color: Colors.black45,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
+            //Reports ----------------------
+            GFAccordion(
+                titleBorderRadius: BorderRadius.circular(10),
+                expandedTitleBackgroundColor: Colors.transparent,
+                collapsedTitleBackgroundColor: Colors.transparent,
+                titleChild: Row(
+                  children: [
+                    Image(
+                        width: 20,
+                        image: AssetImage("assets/images/reports.png")),
+                    SizedBox(
+                        width:
+                            15), // Add some spacing between the icon and the text
+                    AppText(
+                      title: 'Reports',
+                      color: Colors
+                          .black87, // Change the color to match your theme
+                      font_size: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+                contentChild: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StoreSalePurchaseList()));
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20),
+                            child: AppText(
+                                title: "Store sale Purchase Report",
+                                color: Colors
+                                    .black87, // Change the color to match your theme
+                                font_size: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Icon(
+                            Icons.add,
+                            color: Colors.black45,
+                          )
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: appsubtitletextColor,
+                      thickness: 0.2,
                     ),
                   ],
                 )),

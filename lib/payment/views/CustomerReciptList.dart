@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:okra_distributer/payment/Db/dbhelper.dart';
 import 'package:okra_distributer/payment/Models/model.dart';
 import 'package:okra_distributer/bloc/popUpbloc/popBloc.dart';
 import 'package:okra_distributer/bloc/popUpbloc/popEvent.dart';
 import 'package:okra_distributer/bloc/popUpbloc/popState.dart';
+import 'package:okra_distributer/payment/views/Constant.dart';
+
 import 'package:okra_distributer/payment/views/CustomWidgets/infoCont.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Customerreciptlist extends StatefulWidget {
   const Customerreciptlist({Key? key}) : super(key: key);
@@ -17,6 +24,11 @@ class Customerreciptlist extends StatefulWidget {
 
 class _CustomerreciptlistState extends State<Customerreciptlist> {
   final dateController = TextEditingController();
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +38,84 @@ class _CustomerreciptlistState extends State<Customerreciptlist> {
         .read<Popbloc>()
         .add(FilterPaymentsByDate(startDate: startDate, endDate: endDate));
     // context.read<Popbloc>().add(LoadAllPayments());
+  }
+
+  Future<void> syncOfflineData() async {
+    final db = DBHelper();
+
+    try {
+      // Fetching token and appId asynchronously
+      final token = await _getToken();
+      final appId = await db.getAppId();
+
+      // Fetching payments from the database
+      final payments = await db.getAllPaymentWithoutTransactionId();
+
+      // Prepare requestData with awaited values
+      Map<String, dynamic> requestData = {
+        "authorization_token": token,
+        "app_id": appId,
+        "data": {
+          "permanent_customer_payments": {
+            for (var payment in payments)
+              "iPermanentCustomerPaymentsID__${payment['iPermanentCustomerPaymentsID']}":
+                  {
+                "iPermanentCustomerID": payment['iPermanentCustomerID'],
+                "iBankID": payment['iBankID'],
+                "dcPaidAmount": payment['dcPaidAmount'],
+                "sBank": payment['sBank'],
+                "sInvoiceNo": payment['sInvoiceNo'],
+                "sDescription": payment['sDescription'],
+                "dDate": payment['dDate'],
+              },
+          }
+        }
+      };
+
+      // Sending HTTP POST request
+      final response = await http.post(
+        Uri.parse(Constant.customerReciptSync),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(requestData),
+      );
+
+      // Handle the response
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+
+        // Debug print to check responseData structure
+        print("Response Data: $responseData");
+
+        // Check if '0', 'data', and 'permanent_customer_payments' are not null
+        if (responseData['0'] != null &&
+            responseData['0']['data'] != null &&
+            responseData['0']['data']['permanent_customer_payments'] != null) {
+          final updatedData =
+              responseData['0']['data']['permanent_customer_payments'];
+
+          for (var entry in updatedData.entries) {
+            final primaryKey = entry.key.split(
+                '__')[1]; // Extract the primary key from the formatted key
+            final transactionId = entry.value['transaction_id'];
+
+            final payment = PermanentCustomerPayment(
+              iPermanentCustomerPaymentsID: int.parse(primaryKey),
+              transaction_id: transactionId,
+            );
+
+            await db.updatePaymentWithTransactionId(payment);
+          }
+
+          print("Data synced successfully and updated locally!");
+        } else {
+          print("Unexpected response structure: ${responseData['0']['data']}");
+        }
+      } else {
+        print("Failed to sync data: ${response.body}");
+      }
+    } catch (e) {
+      print("Error syncing data: $e");
+    }
   }
 
   @override
@@ -39,14 +129,14 @@ class _CustomerreciptlistState extends State<Customerreciptlist> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
-            icon: Icon(Icons.date_range),
-            onPressed: () {
-              _pickDateRange(context);
-            },
-          ),
+              onPressed: () {
+                // syncOfflineData();
+                DBHelper().printAllPermanentCustomerPayments();
+              },
+              icon: Icon(Icons.search))
         ],
       ),
       backgroundColor: Color.fromARGB(255, 240, 240, 243),

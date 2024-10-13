@@ -20,6 +20,7 @@ class Popbloc extends Bloc<PopEvent, Popstate> {
   Popbloc(this.dbHelper) : super(Popstate()) {
     on<SelectCountries>(_mapCountry);
     on<SelectStates>(_mapState);
+    on<CashColor>(_cashColor);
     on<SelectCities>(_mapCity);
     on<SelectAreas>(_mapArea);
     on<SelectBanks>(_mapBank);
@@ -63,6 +64,11 @@ class Popbloc extends Bloc<PopEvent, Popstate> {
   Future<void> close() {
     _timer?.cancel();
     return super.close();
+  }
+
+  void _cashColor(CashColor event, Emitter<Popstate> emit) {
+    bool cashColor = !state.cashColor;
+    emit(state.copyWith(cashColor: cashColor));
   }
 
   //For Maping Country
@@ -259,20 +265,37 @@ class Popbloc extends Bloc<PopEvent, Popstate> {
     final payment = event.payment;
     final db = await DBHelper();
     int? iPermanentCustomerID = state.selectedCustomerId;
+
     print('Inserting payment for customer ID: $iPermanentCustomerID');
+
     if (iPermanentCustomerID != null) {
-      print('Customer ID is not null, inserting payment...');
-      await db.insertPermanentCustomerPayment(PermanentCustomerPayment(
-        iPermanentCustomerPaymentsID: null,
-        iPermanentCustomerID: iPermanentCustomerID,
-        dcPaidAmount: payment.dcPaidAmount,
-        sBank: payment.sBank,
-        iBankID: payment.iBankID,
-        sInvoiceNo: payment.sInvoiceNo,
-        sDescription: payment.sDescription,
-        dDate: payment.dDate,
-      ));
-      print('Payment inserted successfully!');
+      try {
+        print('Customer ID is not null, inserting payment...');
+        int id =
+            await db.insertPermanentCustomerPayment(PermanentCustomerPayment(
+          iPermanentCustomerPaymentsID: null, // Null for auto-increment
+          iPermanentCustomerID: iPermanentCustomerID,
+          dcPaidAmount: payment.dcPaidAmount,
+          sBank: payment.sBank,
+          iBankID: payment.iBankID,
+          sInvoiceNo: payment.sInvoiceNo,
+          sDescription: payment.sDescription,
+          dDate: payment.dDate,
+          transaction_id: null,
+        ));
+
+        print('Payment inserted successfully! Inserted ID: $id');
+
+        // Update the payment object with the ID
+        payment.iPermanentCustomerPaymentsID = id;
+
+        // If a transaction ID was received from the API, update it
+        if (payment.transaction_id != null) {
+          await db.updatePaymentWithTransactionId(payment);
+        }
+      } catch (e) {
+        print('Error inserting payment: $e');
+      }
     } else {
       print('No customer selected');
     }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:okra_distributer/bloc/popUpbloc/popEvent.dart';
 import 'package:okra_distributer/payment/Models/model.dart';
 import 'package:okra_distributer/payment/views/apicheckingScreen.dart';
 
@@ -19,6 +20,7 @@ class Popstate extends Equatable {
   final String? statuFailed;
   final String? selectedBank;
   final DateTime? startDate;
+  final bool cashColor;
   final List<double>? saleAmount;
   final List<double>? paidAmount;
   final bool isLoading;
@@ -46,6 +48,7 @@ class Popstate extends Equatable {
       this.filterCustomer,
       this.paidAmount,
       this.currentIndex = 1,
+      this.cashColor = false,
       this.states,
       this.maxValue,
       this.startDate,
@@ -130,6 +133,7 @@ class Popstate extends Equatable {
       final bool? isloading,
       final List<double>? saleAmount,
       final int? currentIndex,
+      final bool? cashColor,
       final List<double>? paidAmount,
       List<Area>? areas,
       bool? isLoading,
@@ -158,6 +162,7 @@ class Popstate extends Equatable {
         cities: cities ?? this.cities,
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
+        cashColor: cashColor ?? this.cashColor,
         areas: areas ?? this.areas,
         isLoading: isLoading ?? this.isLoading,
         currentIndex: currentIndex ?? this.currentIndex,
@@ -203,6 +208,7 @@ class Popstate extends Equatable {
         banks,
         selectedBank,
         selectedCountry,
+        cashColor,
         customerExpenses,
         selectedArea,
         selectedCity,

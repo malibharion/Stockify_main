@@ -48,13 +48,20 @@ dependencies:
   getwidget: ^4.0.0
   fl_chart: ^0.68.0
   http: ^1.2.2
+  path_provider: ^2.1.4
   get_storage: ^2.1.1
   intl: ^0.19.0
   connectivity_plus: ^6.0.4
+  file_picker: ^8.1.2
   device_info_plus: ^10.1.1
   pdf: ^3.3.0
+  open_file: ^3.5.3
+  
   printing: ^5.6.0
+
   flutter_blue: ^0.8.0
+  dio: ^5.6.0
+  
   
 
 dev_dependencies:
@@ -85,6 +92,7 @@ flutter:
     - assets/
     - animations/
     - assets/stockfiy.db
+    - assets/fonts/Roboto-Regular.ttf
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,13 +1,20 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:okra_distributer/FirmPartner/Add_Investment/Add_investment_bloc/add_investment_bloc.dart';
+import 'package:okra_distributer/FirmPartner/Add_partner/bloc/bloc.dart';
+import 'package:okra_distributer/FirmPartner/Withdraw/withdraw_bloc/withdraw_bloc.dart';
+import 'package:okra_distributer/Reports/Store%20Sale%20Purchase%20Report/blocs/StoreSalePurchaseBloc/StoreSalePurchaseBloc.dart';
+import 'package:okra_distributer/Reports/Store%20Sale%20Purchase%20Report/blocs/VisibilityBloc/visibilityBloc.dart';
 import 'package:okra_distributer/bloc/UpdatedBloc/updateBloc.dart';
 import 'package:okra_distributer/bloc/UpdatedBloc/updateEvent.dart';
 import 'package:okra_distributer/bloc/fetchdataaBloc/fetchDataBloc.dart';
 import 'package:okra_distributer/bloc/fetchdataaBloc/fetchdataevent.dart';
 import 'package:okra_distributer/bloc/popUpbloc/popBloc.dart';
 import 'package:okra_distributer/payment/Db/dbhelper.dart';
+
 import 'package:okra_distributer/view/daily_expense/bloc/daily_expense_bloc.dart';
 
 import 'package:okra_distributer/view/daily_expense/bloc/date_picker_bloc/data_picker_bloc.dart';
@@ -16,6 +23,7 @@ import 'package:okra_distributer/view/first_homescreen/first_home_screen.dart';
 import 'package:okra_distributer/view/sale/bloc/date_picker_bloc/data_picker_bloc.dart';
 import 'package:okra_distributer/view/sale/bloc_pop_sale/sale_pop_bloc.dart';
 import 'package:okra_distributer/view/sale_order/bloc/bloc_pop_sale_order/sale_pop_bloc.dart';
+
 import 'package:sqflite/sqflite.dart';
 
 void main() async {
@@ -23,6 +31,7 @@ void main() async {
   await GetStorage.init();
   final dbHelper = DBHelper();
   final database = await dbHelper.initDb();
+
   runApp(MyApp(dbHelper: dbHelper, database: database));
 }
 
@@ -70,9 +79,14 @@ class MyApp extends StatelessWidget {
             BlocProvider<DailyExpenseDateBloc>(
               create: (context) => DailyExpenseDateBloc(),
             ),
-             BlocProvider<DailyExpenseBloc>(
+            BlocProvider<DailyExpenseBloc>(
               create: (context) => DailyExpenseBloc(),
             ),
+            BlocProvider(create: (context) => PartnerBloc(dio: Dio())),
+            BlocProvider(create: (context) => WithdrawBloc()),
+            BlocProvider(create: (context) => AddInvestmentBloc()),
+            BlocProvider(create: (context) => VisibilityBloc()),
+            BlocProvider(create: (context) => Storesalepurchasebloc()),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -82,7 +96,9 @@ class MyApp extends StatelessWidget {
                 child: widget!,
               );
             },
-            home: FirstHomeScreen(database: database),
+            home: FirstHomeScreen(
+              database: database,
+            ),
           ),
         );
       },

@@ -12,6 +12,7 @@ import 'package:okra_distributer/view/sale_order/sale_order_list/bloc/sale_order
 import 'package:okra_distributer/view/sale_order/sale_order_list/bloc/sale_order_list_state.dart';
 import 'package:okra_distributer/view/sale_order/sale_order_list/model/sale_order_list_details_model.dart';
 import 'package:okra_distributer/view/sale_order/sale_order_list/model/sale_order_list_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SaleOrderListBloc extends Bloc<SaleOrderListEvent, SaleOrderListState> {
   SaleOrderListBloc() : super(SaleInitialState()) {
@@ -57,6 +58,11 @@ class SaleOrderListBloc extends Bloc<SaleOrderListEvent, SaleOrderListState> {
 
     emit(SuccessState(
         saleList: salesList, firstDate: currentDate, lastDate: currentDate));
+  }
+
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
   }
 
   FutureOr<void> saleListLastMonthEvent(SaleOrderListLastMonthEvent event,
@@ -476,7 +482,7 @@ class SaleOrderListBloc extends Bloc<SaleOrderListEvent, SaleOrderListState> {
     emit(SaleLoadingState());
     final Uri url = Uri.parse(addSaleOrderUrl);
     final _box = GetStorage();
-    final authorization_token = _box.read('token');
+    final authorization_token = await _getToken();
 
     final headers = {'Content-Type': 'application/json'};
 

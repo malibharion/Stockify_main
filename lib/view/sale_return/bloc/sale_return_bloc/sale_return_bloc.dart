@@ -8,6 +8,7 @@ import 'package:okra_distributer/payment/Db/dbhelper.dart';
 import 'package:okra_distributer/view/sale_return/bloc/sale_return_bloc/sale_return_event.dart';
 import 'package:okra_distributer/view/sale_return/bloc/sale_return_bloc/sale_return_state.dart';
 import 'package:okra_distributer/view/sale_return/data/sale_return_billed_items.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SaleReturnBloc extends Bloc<SaleReturnEvent, SaleReturnState> {
   SaleReturnBloc() : super(SaleInitialState()) {
@@ -20,6 +21,10 @@ class SaleReturnBloc extends Bloc<SaleReturnEvent, SaleReturnState> {
     on<AddSaleInvoice>(addSaleInvoice);
     on<SaleAdddingLoadingEvent>(saleAdddingLoadingEvent);
     on<FormErrorEvent>(formErrorEvent);
+  }
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
   }
 
   FutureOr<void> saleInitalEvent(
@@ -180,7 +185,7 @@ class SaleReturnBloc extends Bloc<SaleReturnEvent, SaleReturnState> {
     final Uri url = Uri.parse(
         'https://02bb-39-44-67-217.ngrok-free.app/stockfiy/api/realdata/storesaleorder');
     final _box = GetStorage();
-    final authorization_token = _box.read('token');
+    final authorization_token = await _getToken();
     final iFirmID = _box.read('iFirmID');
     final iSystemUserID = _box.read('iSystemUserID');
 

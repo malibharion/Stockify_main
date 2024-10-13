@@ -10,6 +10,7 @@ import 'package:okra_distributer/payment/Db/dbhelper.dart';
 import 'package:okra_distributer/view/daily_expense/bloc/daily_expense_event.dart';
 import 'package:okra_distributer/view/daily_expense/bloc/daily_expense_state.dart';
 import 'package:okra_distributer/view/daily_expense/model/daily_expense_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DailyExpenseBloc extends Bloc<DailyExpenseEvent, DailyExpenseState> {
   DailyExpenseBloc() : super(DailyExpenseInitialState()) {
@@ -33,6 +34,11 @@ class DailyExpenseBloc extends Bloc<DailyExpenseEvent, DailyExpenseState> {
         rows.map((row) => ExpenseTypeModel.fromMap(row)).toList();
     emit(DailyExpenseTypeActionState(expenseTypes: expenseTypes));
     // Use the list of ExpenseType objects as needed
+  }
+
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
   }
 
   FutureOr<void> dailyExpenseTypeChangedActionEvent(
@@ -92,7 +98,7 @@ class DailyExpenseBloc extends Bloc<DailyExpenseEvent, DailyExpenseState> {
     final _box = GetStorage();
     // final iFirmID = _box.read('iFirmID');
     // final iSystemUserID = _box.read('iSystemUserID');
-    final authorization_token = _box.read('token');
+    final authorization_token = await _getToken();
     final body = {
       'authorization_token': authorization_token,
       'iDailyExpenseID': lastid,

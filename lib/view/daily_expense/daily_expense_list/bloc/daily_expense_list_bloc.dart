@@ -11,6 +11,7 @@ import 'package:okra_distributer/view/daily_expense/model/daily_expense_model.da
 import 'package:http/http.dart' as http;
 
 import 'package:okra_distributer/view/sale_order/sale_order_list/model/sale_order_list_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SaleOrderListBloc extends Bloc<SaleOrderListEvent, SaleOrderListState> {
   SaleOrderListBloc() : super(SaleInitialState()) {
@@ -28,6 +29,11 @@ class SaleOrderListBloc extends Bloc<SaleOrderListEvent, SaleOrderListState> {
     on<SaleOrderListDetailsEvent>(saleListDetailsEvent);
     on<DailyExpenseListSyncEvent>(dailyExpenseListSyncEvent);
   }
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
+  }
+
   FutureOr<void> dailyExpenseTypeDropdownChangeEvent(
       DailyExpenseTypeDropdownChangeEvent event,
       Emitter<SaleOrderListState> emit) async {
@@ -901,7 +907,7 @@ class SaleOrderListBloc extends Bloc<SaleOrderListEvent, SaleOrderListState> {
 
     final Uri url = Uri.parse(SyncDataUrl);
     final _box = GetStorage();
-    final authorization_token = _box.read('token');
+    final authorization_token = await _getToken();
 
     DBHelper dbHelper = DBHelper();
     // final db = dbHelper.database;

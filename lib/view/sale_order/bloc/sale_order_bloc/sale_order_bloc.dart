@@ -9,6 +9,7 @@ import 'package:okra_distributer/payment/Db/dbhelper.dart';
 import 'package:okra_distributer/view/sale_order/bloc/sale_order_bloc/sale_order_event.dart';
 import 'package:okra_distributer/view/sale_order/bloc/sale_order_bloc/sale_order_state.dart';
 import 'package:okra_distributer/view/sale_order/data/sale_order_billed_items.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SaleOrderBloc extends Bloc<SaleOrderEvent, SaleOrderState> {
   SaleOrderBloc() : super(SaleInitialState()) {
@@ -35,6 +36,11 @@ class SaleOrderBloc extends Bloc<SaleOrderEvent, SaleOrderState> {
         products.map((e) => e['sProductName'] as String).toSet().toList();
     emit(SaleLoadedState());
     emit(SaleSuccessState(items: items, selectedItem: null));
+  }
+
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
   }
 
   FutureOr<void> saleDropdownSelectEvent(
@@ -324,7 +330,7 @@ class SaleOrderBloc extends Bloc<SaleOrderEvent, SaleOrderState> {
     // API CALL
     final Uri url = Uri.parse(addSaleOrderUrl);
     final _box = GetStorage();
-    final authorization_token = _box.read('token');
+    final authorization_token = await _getToken();
     final iFirmID = _box.read('iFirmID');
     final iSystemUserID = _box.read('iSystemUserID');
 
@@ -832,7 +838,7 @@ class SaleOrderBloc extends Bloc<SaleOrderEvent, SaleOrderState> {
     // API CALL
     final Uri url = Uri.parse(addSaleOrderUrl);
     final _box = GetStorage();
-    final authorization_token = _box.read('token');
+    final authorization_token = await _getToken();
     final iFirmID = _box.read('iFirmID');
     final iSystemUserID = _box.read('iSystemUserID');
 

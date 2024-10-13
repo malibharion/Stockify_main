@@ -955,6 +955,7 @@ class PermanentCustomerPayment {
   int? iUpdatedBy;
   DateTime? dtDeletedDate;
   int? iDeletedBy;
+  String? transaction_id;
 
   PermanentCustomerPayment({
     this.iPermanentCustomerPaymentsID,
@@ -962,6 +963,7 @@ class PermanentCustomerPayment {
     this.customerName,
     this.iBankID,
     this.iSystemUserID,
+    this.transaction_id,
     this.iEmployeeID,
     this.iFirmID,
     this.iTableID,
@@ -986,38 +988,38 @@ class PermanentCustomerPayment {
 
   factory PermanentCustomerPayment.fromMap(Map<String, dynamic> map) {
     return PermanentCustomerPayment(
-      iPermanentCustomerPaymentsID: map['iPermanentCustomerPaymentsID'] ?? 0,
-      iPermanentCustomerID: map['iPermanentCustomerID'] ?? 0,
-      customerName: map['customerName'] ?? '', // Add this line
-      iBankID: map['iBankID'],
-      iSystemUserID: map['iSystemUserID'],
-      iEmployeeID: map['iEmployeeID'] ?? 0,
-      iFirmID: map['iFirmID'],
-      iTableID: map['iTableID'],
-      sTableName: map['sTableName'] ?? '',
-      dcPaidAmount: map['dcPaidAmount']?.toDouble(),
-      sBank: map['sBank'] ?? '',
-      sCheckNumber: map['sCheckNumber'] ?? '',
-      sInvoiceNo: map['sInvoiceNo'] ?? '',
-      sDescription: map['sDescription'] ?? '',
-      sSyncStatus: map['sSyncStatus'] ?? '',
-      sEntrySource: map['sEntrySource'] ?? '',
-      sAction: map['sAction'] ?? '',
-      dDate: map['dDate'] != null ? DateTime.parse(map['dDate']) : null,
-      dtCreatedDate: map['dtCreatedDate'] != null
-          ? DateTime.parse(map['dtCreatedDate'])
-          : null,
-      bStatus: map['bStatus'],
-      iAddedBy: map['iAddedBy'],
-      dtUpdatedDate: map['dtUpdatedDate'] != null
-          ? DateTime.parse(map['dtUpdatedDate'])
-          : null,
-      iUpdatedBy: map['iUpdatedBy'],
-      dtDeletedDate: map['dtDeletedDate'] != null
-          ? DateTime.parse(map['dtDeletedDate'])
-          : null,
-      iDeletedBy: map['iDeletedBy'],
-    );
+        iPermanentCustomerPaymentsID: map['iPermanentCustomerPaymentsID'] ?? 0,
+        iPermanentCustomerID: map['iPermanentCustomerID'] ?? 0,
+        customerName: map['customerName'] ?? '', // Add this line
+        iBankID: map['iBankID'],
+        iSystemUserID: map['iSystemUserID'],
+        iEmployeeID: map['iEmployeeID'] ?? 0,
+        iFirmID: map['iFirmID'],
+        iTableID: map['iTableID'],
+        sTableName: map['sTableName'] ?? '',
+        dcPaidAmount: map['dcPaidAmount']?.toDouble(),
+        sBank: map['sBank'] ?? '',
+        sCheckNumber: map['sCheckNumber'] ?? '',
+        sInvoiceNo: map['sInvoiceNo'] ?? '',
+        sDescription: map['sDescription'] ?? '',
+        sSyncStatus: map['sSyncStatus'] ?? '',
+        sEntrySource: map['sEntrySource'] ?? '',
+        sAction: map['sAction'] ?? '',
+        dDate: map['dDate'] != null ? DateTime.parse(map['dDate']) : null,
+        dtCreatedDate: map['dtCreatedDate'] != null
+            ? DateTime.parse(map['dtCreatedDate'])
+            : null,
+        bStatus: map['bStatus'],
+        iAddedBy: map['iAddedBy'],
+        dtUpdatedDate: map['dtUpdatedDate'] != null
+            ? DateTime.parse(map['dtUpdatedDate'])
+            : null,
+        iUpdatedBy: map['iUpdatedBy'],
+        dtDeletedDate: map['dtDeletedDate'] != null
+            ? DateTime.parse(map['dtDeletedDate'])
+            : null,
+        iDeletedBy: map['iDeletedBy'],
+        transaction_id: map['transaction_id']);
   }
 
   Map<String, dynamic> toMap() {
@@ -1045,6 +1047,7 @@ class PermanentCustomerPayment {
       'iUpdatedBy': iUpdatedBy,
       'dtDeletedDate': dtDeletedDate?.toIso8601String(),
       'iDeletedBy': iDeletedBy,
+      'transaction_id': transaction_id
     };
   }
 }

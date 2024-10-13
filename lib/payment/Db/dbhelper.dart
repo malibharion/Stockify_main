@@ -105,6 +105,62 @@ class DBHelper {
     return min + random.nextInt(max - min + 1);
   }
 
+  Future<List<Map<String, dynamic>>> getAllPaymentWithoutTransactionId() async {
+    final db = await database;
+    return await db.query(
+      'permanent_customer_payments',
+      columns: [
+        'iPermanentCustomerPaymentsID',
+        'iPermanentCustomerID',
+        'iBankID',
+        'dcPaidAmount',
+        'sBank',
+        'sInvoiceNo',
+        'sDescription',
+        'dDate',
+        'transaction_id'
+      ],
+      where: 'transaction_id IS NULL',
+    );
+  }
+
+  Future<void> updatePaymentWithTransactionId(
+      PermanentCustomerPayment payment) async {
+    final db = await database;
+
+    // Check if the row exists
+    final result = await db.query(
+      'permanent_customer_payments', // Ensure this is correct
+      where: 'iPermanentCustomerPaymentsID = ?',
+      whereArgs: [payment.iPermanentCustomerPaymentsID],
+    );
+
+    if (result.isEmpty) {
+      print(
+          'No matching row found for ID: ${payment.iPermanentCustomerPaymentsID}');
+      return;
+    }
+
+    // Update the payment record with the transaction ID
+    int updateResult = await db.update(
+      'permanent_customer_payments', // Ensure this matches your table name
+      {
+        ' transaction_id':
+            payment.transaction_id, // Ensure this field is correct
+      },
+      where:
+          'iPermanentCustomerPaymentsID = ?', // Ensure this is your primary key
+      whereArgs: [payment.iPermanentCustomerPaymentsID],
+    );
+
+    print('Rows affected: $updateResult');
+    if (updateResult > 0) {
+      print('Transaction ID updated successfully.');
+    } else {
+      print('Failed to update Transaction ID.');
+    }
+  }
+
   Future<List<Country>> getCountries() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('country');
@@ -775,6 +831,28 @@ class DBHelper {
             'Inserted permission: ${permission.name} - ${permission.description}');
       } catch (e) {
         print('Error inserting permission: $e');
+      }
+    }
+  }
+
+  Future<void> printAllPermanentCustomerPayments() async {
+    final db = await database; // Get the database instance
+
+    // Query all rows from the permanent_customer_payments table
+    final List<Map<String, dynamic>> payments =
+        await db.query('permanent_customer_payments');
+
+    // Check if there are any payments
+    if (payments.isEmpty) {
+      print('No payments found in the database.');
+    } else {
+      // Print each payment entry
+      for (var payment in payments) {
+        print('Payment Entry:');
+        payment.forEach((key, value) {
+          print('$key: $value');
+        });
+        print('------------------------'); // Separator for readability
       }
     }
   }
